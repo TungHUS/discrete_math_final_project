@@ -99,7 +99,7 @@ def solve(start_node, end_node, coor, link, max_search_node = 2):
                 potential.append(elem[0])
                 if elem[0] != start_node[0]:
                     path.append(elem)
-                    path.extend(find_path   (start_node, elem[0],  candidate))
+                    path.extend(find_path(start_node, elem[0],  candidate))
                 else:
                     path.append(elem)
         return path
@@ -120,7 +120,7 @@ def draw_route(path, candidate, visited):
             color = red
             size = 60
             shape = "dot"
-        elif node in candidate:
+        elif node in visited:
             color = pink
             size = 40
             shape = "dot"
@@ -145,7 +145,7 @@ def draw_route(path, candidate, visited):
 
 
 # UI
-gare_list = tuple(coor.keys())
+gare_list = sorted(list(coor.keys()))
 
 st.sidebar.title("Sơ đồ đường tàu:")
 base_network = st.sidebar.button("Hiện")
@@ -170,10 +170,10 @@ if base_network:
     components.html(source_code, height = 1000, width = 1000)
 
 if route:
-    path, candidate, visited = solve(departure, destination, coor, link, max_search_node = 3)
+    path, candidate, visited = solve(departure, destination, coor, link, max_search_node = 2)
     draw_route(path, candidate, visited)
     HtmlFile = open('temp/route.html', 'r',  encoding='utf-8')
     source_code = HtmlFile.read()
     st.header("Route:")
-    st.write(" => ".join(path))
+    st.write(" > ".join(path))
     components.html(source_code, height = 1000, width = 1000)
