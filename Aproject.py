@@ -72,26 +72,34 @@ def solve(start_node, end_node, coor, link, max_search_node = 2):
 
     visited = set()
     def AStarSearch(start_node, end_node, coor, link, max_search_node = max_search_node):
+        '''
+        return:  trả về mảng chứa các cạnh của phù hợp với đường đi ngắn nhất
+        '''
+        
         cost = []
         candidate = []
         nonlocal visited
         for node in start_node:
             for sub_node in link[node]:
-                visited.add(sub_node)
                 cost.append([node, sub_node, norm1(node, sub_node, coor) + norm1(sub_node, end_node, coor)]) # g + h
+        cost = [x for x in cost if x[1] not in visited]
         temp = sorted(cost, key = lambda x: x[2])
         temp = temp[:min(max_search_node,len(temp))]
 
         nearest_nodes = [x[1] for x in temp]
+        for x  in nearest_nodes: visited.add(x)
         if end_node not in nearest_nodes:
             candidate.extend(temp)
-            candidate.extend(AStarSearch(nearest_nodes, end_node, coor,     link))
+            candidate.extend(AStarSearch(nearest_nodes, end_node, coor, link))  # recursion
         else:
             candidate.extend(temp)
         return candidate
 
     potential = []
     def find_path(start_node, end_node, candidate):
+        '''
+        Returns: tìm  trong mảng kết quả của func AStarSearch và tìm ra đường ngắn nhất
+        '''
         path = []
         temp = [x for x in candidate if x[1] == end_node]
         for elem in temp:
@@ -106,6 +114,7 @@ def solve(start_node, end_node, coor, link, max_search_node = 2):
     candidate = AStarSearch(start_node, end_node, coor, link)
     path = find_path(start_node, end_node,  candidate)[::-1]
     path = list(list(zip(*path))[0]) +  [end_node]
+    path = path[path.index(start_node[0]):]
     return path, candidate, visited
 
 
