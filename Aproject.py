@@ -71,11 +71,7 @@ def solve(start_node, end_node, coor, link, max_search_node = 2):
     end_node = end_node
 
     visited = set()
-    def AStarSearch(start_node, end_node, coor, link, max_search_node = max_search_node):
-        '''
-        return:  trả về mảng chứa các cạnh của phù hợp với đường đi ngắn nhất
-        '''
-        
+    def AStarSearch(start_node, end_node, coor, link, max_search_node = 3):
         cost = []
         candidate = []
         nonlocal visited
@@ -83,33 +79,33 @@ def solve(start_node, end_node, coor, link, max_search_node = 2):
             for sub_node in link[node]:
                 cost.append([node, sub_node, norm1(node, sub_node, coor) + norm1(sub_node, end_node, coor)]) # g + h
         cost = [x for x in cost if x[1] not in visited]
+        if len(cost) == 0:
+            candidate.extend(['','',1])
+            return candidate
         temp = sorted(cost, key = lambda x: x[2])
         temp = temp[:min(max_search_node,len(temp))]
-
         nearest_nodes = [x[1] for x in temp]
         for x  in nearest_nodes: visited.add(x)
         if end_node not in nearest_nodes:
             candidate.extend(temp)
-            candidate.extend(AStarSearch(nearest_nodes, end_node, coor, link))  # recursion
+            candidate.extend(AStarSearch(nearest_nodes, end_node, coor, link))
         else:
             candidate.extend(temp)
         return candidate
-
+    
     potential = []
     def find_path(start_node, end_node, candidate):
-        '''
-        Returns: tìm  trong mảng kết quả của func AStarSearch và tìm ra đường ngắn nhất
-        '''
         path = []
         temp = [x for x in candidate if x[1] == end_node]
         for elem in temp:
             if elem[0] not in potential:
                 potential.append(elem[0])
-                if elem[0] != start_node[0]:
+                if elem[1] != start_node[0]:
                     path.append(elem)
                     path.extend(find_path(start_node, elem[0],  candidate))
                 else:
                     path.append(elem)
+    
         return path
     candidate = AStarSearch(start_node, end_node, coor, link)
     path = find_path(start_node, end_node,  candidate)[::-1]
@@ -165,8 +161,8 @@ destination = st.sidebar.selectbox("Điểm đến:",gare_list)
 route = st.sidebar.button("Tìm đường")
 
 st.sidebar.header("Thành viên:")
-st.sidebar.text("- Lê Thanh Tùng")
-st.sidebar.text("- Phạm Tuấn Cường")
+st.sidebar.text("- Lê Thanh Tùng - 20007905")
+st.sidebar.text("- Phạm Tuấn Cường - 20007928")
 st.sidebar.text("- Phùng Lệ Diễm")
 
 
