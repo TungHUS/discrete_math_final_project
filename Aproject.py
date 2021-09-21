@@ -1,5 +1,3 @@
-from typing import get_args
-from pandas.core import generic
 import streamlit as st
 from pyvis.network import Network
 import json
@@ -160,10 +158,10 @@ departure = st.sidebar.selectbox("Điểm đi:",gare_list)
 destination = st.sidebar.selectbox("Điểm đến:",gare_list)
 route = st.sidebar.button("Tìm đường")
 
-st.sidebar.header("Thành viên:")
+st.sidebar.header("Thành viên - Mã học viên:")
 st.sidebar.text("- Lê Thanh Tùng - 20007905")
 st.sidebar.text("- Phạm Tuấn Cường - 20007928")
-st.sidebar.text("- Phùng Lệ Diễm")
+st.sidebar.text("- Phùng Lệ Diễm - 20007927 ")
 
 
 st.title("Thuật toán A* tìm đường đi giữa 2 điểm")
@@ -175,7 +173,7 @@ if base_network:
     components.html(source_code, height = 1000, width = 1000)
 
 if route:
-    path, candidate, visited = solve(departure, destination, coor, link, max_search_node = 2)
+    path, candidate, visited = solve(departure, destination, coor, link, max_search_node = 3)
     draw_route(path, candidate, visited)
     HtmlFile = open('temp/route.html', 'r',  encoding='utf-8')
     source_code = HtmlFile.read()
